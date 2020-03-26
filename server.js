@@ -1,7 +1,16 @@
-const express = require('express')
-const app = express()
-const port = 3000
+var app = require('express')();
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+const port = 3001
 
-app.get('/', (req, res) => res.send('Hello World!'))
+// Make root path act like a health check
+app.get('/', (req, res) => res.send('Backend Jeopardy Server is Up!'))
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+http.listen(port, function(){
+    console.log(`Backend jeopardy server listening on port ${port}`);
+  });
+
+// Listen for all socket connections, and then mount listeners
+io.on('connection', function(socket){
+  console.log('a user connected: ', socket.id);
+});

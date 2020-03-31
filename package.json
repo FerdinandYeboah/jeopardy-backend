@@ -14,6 +14,7 @@
     "bufferutil": "^4.0.1",
     "core-util-is": "^1.0.2",
     "express": "^4.17.1",
+    "nodemon": "^2.0.2",
     "socket.io": "^2.3.0",
     "typescript": "^3.8.3",
     "utf-8-validate": "^5.0.2"

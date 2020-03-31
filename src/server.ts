@@ -1,7 +1,7 @@
 var app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
-import { UserJoined } from "./models/Events";
+import * as handlers from "./handlers/EventHandlers";
 
 const port = 3001
 
@@ -16,12 +16,6 @@ http.listen(port, function(){
 io.on('connection', function(socket: any){
   console.log('a user connected: ', socket.id);
 
-  socket.on("userJoined", userJoined)
+  socket.on("userCreated", handlers.userCreated)
 });
 
-
-
-// Functions
-function userJoined(data: UserJoined){
-  console.log("userJoined server data: ", data)
-}

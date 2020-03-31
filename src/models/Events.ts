@@ -1,3 +1,3 @@
-export type UserJoined = {
+export type UserCreated = {
     name: string
 }

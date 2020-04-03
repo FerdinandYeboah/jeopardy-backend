@@ -1,9 +1,6 @@
-// Import models
 import { UserCreated } from "../models/Events";
 import { dataStore } from "../persistence/Datastore";
 import { Game } from "../models/Game";
-
-// Import datastore
 
 export class EventHandler {
 

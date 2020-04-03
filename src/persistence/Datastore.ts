@@ -1,5 +1,5 @@
 // Data layer
-import { Game, Player } from "../models/Game";
+import { Game, Player, State } from "../models/Game";
 
 class DataStore {
     // In memory datastore
@@ -32,10 +32,18 @@ class DataStore {
 const dataStore = new DataStore();
 
 // Add some initial games to test?
-const game = new Game("EveryoneWelcome", "Genesis", "samples/Genesis.csv");
+const game1 = new Game("EveryoneWelcome", "Genesis", "samples/Genesis.csv");
+const game2 = new Game("Pros Only", "B-Ball Trick Plays", "samples/bball.csv");
+game2.state = State.GAME
 
-dataStore.addGame(game)
-dataStore.addPlayerToGame(game.id, new Player("Ferdinand", 0))
+
+dataStore.addGame(game1)
+dataStore.addGame(game2)
+
+dataStore.addPlayerToGame(game1.id, new Player("Ferdinand", 0))
+dataStore.addPlayerToGame(game2.id, new Player("Baller", 0))
+dataStore.addPlayerToGame(game2.id, new Player("Bucket", 0))
+
 
 export {dataStore}
 

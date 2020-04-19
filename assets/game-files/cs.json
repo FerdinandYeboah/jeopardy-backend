@@ -1,0 +1,287 @@
+{
+    "Genesis": [
+        {
+            "value": "200",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "400",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "600",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "800",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "1000",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        }
+    ],
+    "Exodus": [
+        {
+            "value": "200",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "400",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "600",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "800",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "1000",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        }
+    ],
+    "Lev": [
+        {
+            "value": "200",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "400",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "600",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "800",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "1000",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        }
+    ],
+    "Numbers": [
+        {
+            "value": "200",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "400",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "600",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "800",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "1000",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        }
+    ],
+    "Deut": [
+        {
+            "value": "200",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "400",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "600",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "800",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        },
+        {
+            "value": "1000",
+            "question": "Who was the first man?",
+            "answers": {
+                "A": "Cain",
+                "B": "Abel",
+                "C": "Adam",
+                "D": "Eve"
+            },
+            "correctAnswer": "C"
+        }
+    ]
+}

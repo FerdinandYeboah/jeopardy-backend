@@ -9,6 +9,12 @@ const port = 3001
 // Make root path act like a health check
 app.get('/', (req: any, res: any) => res.send('Backend Jeopardy Server is Up!'))
 
+// HTTP Endpoint for getting the list of rooms - Could be done by a two socket events (requested/received)
+app.get("/topics", function(req: any, res: any){
+  //Get list of topics - files from datastore.
+
+})
+
 http.listen(port, function(){
     console.log(`Backend jeopardy server listening on port ${port}`);
   });

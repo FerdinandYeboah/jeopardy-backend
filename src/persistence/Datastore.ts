@@ -1,9 +1,13 @@
 // Data layer
 import { Game, Player, State } from "../models/Game";
+import { File } from "../models/File";
+import { fileService } from "../service/FileService";
 
 class DataStore {
     // In memory datastore
     readonly games: Game[] = []
+
+    files: File[] = fileService.getFiles();
 
     addGame(game: Game){
         this.games.push(game);
@@ -26,6 +30,7 @@ class DataStore {
         // If foundGame is false, throw error
 
     }
+
 }
 
 // Global datastore variable

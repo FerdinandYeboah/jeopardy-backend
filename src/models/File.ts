@@ -1,4 +1,3 @@
-// Game Model - Matches with RoomBackendModel on frontend
 class File {
     id: number; //Keep a static variable that is already incremented?
     name: string | undefined;

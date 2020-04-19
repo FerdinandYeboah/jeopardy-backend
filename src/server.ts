@@ -1,4 +1,7 @@
 import { EventHandler } from "./handlers/EventHandlers";
+import { dataStore } from "./persistence/Datastore";
+import { Topic, convertFileListToTopicList } from "./models/Topic";
+import { File } from "./models/File";
 
 var app = require('express')();
 var http = require('http').createServer(app);
@@ -9,10 +12,15 @@ const port = 3001
 // Make root path act like a health check
 app.get('/', (req: any, res: any) => res.send('Backend Jeopardy Server is Up!'))
 
-// HTTP Endpoint for getting the list of rooms - Could be done by a two socket events (requested/received)
+// HTTP Endpoint for getting the list of topics - Could be done by a two socket events (requested/received)
 app.get("/topics", function(req: any, res: any){
   //Get list of topics - files from datastore.
+  let files: File[] = dataStore.files;
 
+  //Convert to frontend file list model and send. This is for create room endpoint. Getting rooms list is currently a socket listener.
+  let topics: Topic[] = convertFileListToTopicList(files);
+
+  res.send(topics);
 })
 
 http.listen(port, function(){

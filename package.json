@@ -11,9 +11,11 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@types/cors": "^2.8.6",
     "@types/node": "^13.9.5",
     "bufferutil": "^4.0.1",
     "core-util-is": "^1.0.2",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "nodemon": "^2.0.2",
     "socket.io": "^2.3.0",

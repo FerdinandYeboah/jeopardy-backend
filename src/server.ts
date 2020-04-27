@@ -1,3 +1,5 @@
+import cors from "cors";
+
 import { EventHandler } from "./handlers/EventHandlers";
 import { dataStore } from "./persistence/Datastore";
 import { Topic, convertFileListToTopicList } from "./models/Topic";
@@ -8,6 +10,9 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
 const port = 3001
+
+//Enable cors for all requests
+app.use(cors())
 
 // Make root path act like a health check
 app.get('/', (req: any, res: any) => res.send('Backend Jeopardy Server is Up!'))

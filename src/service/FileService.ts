@@ -5,6 +5,30 @@ class FileService {
 
     files: File[] = this.loadFiles();
 
+    getFileById(id: number): File {
+        //Loop and find file to return else, throw exception? Alternative to using null would be to create a variable didFindFile and use that
+        let file: File = null;
+
+        for (let i = 0; i < this.files.length; i++) {
+            const element = this.files[i];
+            
+            if (element.id === id){
+                file = element;
+                return element;
+            }
+        }
+
+        
+        if (file != null){
+            return file;
+        }
+        else {
+            //Will this completely shut down the server? I think it will if not handled
+            throw "File ID Not found!";
+        }
+
+    }
+
     getFiles(){
         return this.files;
     }

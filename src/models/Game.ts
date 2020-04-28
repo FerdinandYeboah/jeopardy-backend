@@ -1,15 +1,17 @@
+import { File } from "./File";
+
 // Game Model - Matches with RoomBackendModel on frontend
 class Game {
     id: number; //Keep a static variable that is already incremented?
     name: string | undefined;
     topic: string | undefined;
-    file: string | undefined; //Maybe make this a File object that is a 2D array of questions. Then data/questions would be a better name
+    file: File;
     players: Player[] = [];
     state: State = State.LOBBY;
 
     public static GAME_ID: number = 1;
 
-    constructor(name: string, topic: string, file: string){
+    constructor(name: string, topic: string, file: File){
         this.name = name;
         this.topic = topic;
         this.file = file;
@@ -28,11 +30,12 @@ class Game {
 
 class Player {
     name: string;
-    score: number;
     socket: any;
+    score: number;
 
-    constructor(name: string, score: number){
+    constructor(name: string, socket: any, score: number){
         this.name = name;
+        this.socket = socket;
         this.score = score;
     }
 }

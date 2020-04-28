@@ -42,5 +42,8 @@ io.on('connection', function(socket: any){
   //Set event handlers and bind to handlers object so that 'this' variable contains socket. Referencing exported functions outside of class changes the this by default
   socket.on("userCreated", handlers.userCreated.bind(handlers))
   socket.on("roomListRequested", handlers.roomListRequested.bind(handlers))
+  socket.on("roomCreated", handlers.roomCreated.bind(handlers))
+
+  //System provided events. i.e disconnect
 });
 

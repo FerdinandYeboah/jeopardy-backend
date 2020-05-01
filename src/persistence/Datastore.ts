@@ -72,7 +72,7 @@ class DataStore {
         
         //Get the game from id
         for (let user of this.users){
-            if (user.socket.id === socketId){
+            if (user.id === socketId){
                 foundUser = user;
             }
         }
@@ -96,9 +96,9 @@ dataStore.addGame("EveryoneWelcome", 3);
 dataStore.addGame("Pros Only", 1);
 dataStore.startGame(2);
 
-dataStore.addPlayerToGame(1, new Player("Ferdinand", "fake_socket", 0))
-dataStore.addPlayerToGame(2, new Player("Baller", "socket" , 0))
-dataStore.addPlayerToGame(2, new Player("Bucket", "wss", 0))
+dataStore.addPlayerToGame(1, new Player("Ferdinand", "fake_socket_id", 0))
+dataStore.addPlayerToGame(2, new Player("Baller", "socket_id" , 0))
+dataStore.addPlayerToGame(2, new Player("Bucket", "wss_id", 0))
 
 
 export {dataStore}

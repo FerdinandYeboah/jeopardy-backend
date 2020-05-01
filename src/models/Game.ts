@@ -30,12 +30,12 @@ class Game {
 
 class Player {
     name: string;
-    socket: any;
+    id: string;
     score: number;
 
-    constructor(name: string, socket: any, score: number){
+    constructor(name: string, id: any, score: number){
         this.name = name;
-        this.socket = socket;
+        this.id = id;
         this.score = score;
     }
 }

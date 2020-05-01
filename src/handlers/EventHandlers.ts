@@ -17,7 +17,7 @@ export class EventHandler {
         console.log("UserCreated server data: ", data)
 
         //Add the user and their profile info to datastore.
-        dataStore.addUser(this.socket, data.name);
+        dataStore.addUser(this.socket.id, data.name);
     }
 
     roomListRequested() {
@@ -27,11 +27,12 @@ export class EventHandler {
         //Optional - Convert to send relevant fields. I.e filter out player scores, file paths etc.
 
 
-        //Return list of rooms
+        //Return list of rooms //TODO: CHANGE TO ONLY RETURN RELEVANT INFO - NOT FILE & ANSWERS
         this.socket.emit("roomListResponse", games)
     }
 
     roomCreated(data: RoomCreated) {
+        console.log("RoomCreated server data: ", data)
         /* Hmmm, this is a bit tricky. Seems I need an independent users[] in the datastore
            I logically should get the user profile (like name) from the users[] once I get the socket id passed in.
            This would mean I would need to store the users independently from the game.
@@ -66,10 +67,11 @@ export class EventHandler {
           -The "REFERENCE" way doesn't have to be actual memory references could be a method call
             to a service that returns the user, or links the user, then if its null you know they are gone. I suppose the function would be called every time you want a player.
         */
-        dataStore.addPlayerToGame(game.id, new Player(user.name, user.socket, 0));
+        dataStore.addPlayerToGame(game.id, new Player(user.name, user.id, 0));
 
-        //Notify list of rooms updated. emit roomListUpdated. Will deprecated roomListResponse
-        // this.socket.emit("roomListResponse", games)
+        //Notify list of rooms updated. emit roomListUpdated. Will deprecated roomListResponse //TODO: CHANGE TO ONLY RETURN RELEVANT INFO - NOT FILE & ANSWERS
+        const games: Game[] = dataStore.games;
+        this.socket.emit("roomListResponse", games);
     }
 }
 

@@ -1,9 +1,9 @@
 class User {
-    socket: any;
+    id: any; //Will be socket id
     name: string;
 
-    constructor(socket: any, name: string){
-        this.socket = socket;
+    constructor(id: any, name: string){
+        this.id = id;
         this.name = name;
     }
 }

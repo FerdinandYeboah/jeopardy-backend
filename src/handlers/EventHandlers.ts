@@ -6,10 +6,12 @@ import { User } from "../models/User";
 export class EventHandler {
 
     private socket: any;
+    private io: any;
 
-    constructor(socket: any){
+    constructor(socket: any, io: any){
         console.log("socket in constructor", socket.id)
         this.socket = socket;
+        this.io = io;
     }
 
     // Handler functions
@@ -18,6 +20,8 @@ export class EventHandler {
 
         //Add the user and their profile info to datastore.
         dataStore.addUser(this.socket.id, data.name);
+
+        this.socket.emit("roomListUpdated", dataStore.games);
     }
 
     roomListRequested() {
@@ -71,7 +75,7 @@ export class EventHandler {
 
         //Notify list of rooms updated. emit roomListUpdated. Will deprecated roomListResponse //TODO: CHANGE TO ONLY RETURN RELEVANT INFO - NOT FILE & ANSWERS
         const games: Game[] = dataStore.games;
-        this.socket.emit("roomListResponse", games);
+        this.io.emit("roomListUpdated", games);
     }
 }
 

@@ -37,7 +37,7 @@ io.on('connection', function(socket: any){
   // console.log('interior this: ', this); // Apparently 'this' is the io object?
   console.log('a user connected: ', socket.id);
 
-  const handlers = new EventHandler(socket);
+  const handlers = new EventHandler(socket, io);
 
   //Set event handlers and bind to handlers object so that 'this' variable contains socket. Referencing exported functions outside of class changes the this by default
   socket.on("userCreated", handlers.userCreated.bind(handlers))

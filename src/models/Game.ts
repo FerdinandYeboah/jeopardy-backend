@@ -3,6 +3,7 @@ import { File } from "./File";
 // Game Model - Matches with RoomBackendModel on frontend
 class Game {
     id: number; //Keep a static variable that is already incremented?
+    socketRoom: string; //socket io room
     name: string | undefined;
     topic: string | undefined;
     file: File;
@@ -16,6 +17,7 @@ class Game {
         this.topic = topic;
         this.file = file;
         this.id = Game.GAME_ID;
+        this.socketRoom = this.id.toString();
 
         //Increment static game id counter
         Game.GAME_ID++;

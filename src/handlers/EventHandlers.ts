@@ -1,4 +1,4 @@
-import { UserCreated, RoomCreated } from "../models/Events";
+import { UserCreated, RoomCreated, UserJoinedGame } from "../models/Events";
 import { dataStore } from "../persistence/Datastore";
 import { Game, Player } from "../models/Game";
 import { User } from "../models/User";
@@ -57,11 +57,8 @@ export class EventHandler {
            - Meaning the answer to the question is, query all the games and return if the user is in or not. 
         */
 
-        //Create the room (game)
+        //Create the room (game). Don't auto add player, will be done via a transition to user joined.
         let game: Game = dataStore.addGame(data.roomName, data.fileId);
-
-        //Add the first player. Get from socket
-        let user: User = dataStore.findUserBySocketId(this.socket.id);
 
         /* IMPORTANT NOTE: The players in the game structure can be better.
            The player information in the game should somehow be a REFERENCE to the users store
@@ -71,11 +68,35 @@ export class EventHandler {
           -The "REFERENCE" way doesn't have to be actual memory references could be a method call
             to a service that returns the user, or links the user, then if its null you know they are gone. I suppose the function would be called every time you want a player.
         */
-        dataStore.addPlayerToGame(game.id, new Player(user.name, user.id, 0));
 
-        //Notify list of rooms updated. emit roomListUpdated. Will deprecated roomListResponse //TODO: CHANGE TO ONLY RETURN RELEVANT INFO - NOT FILE & ANSWERS
+        //Notify list of rooms updated. Emit response with game id so creator can "auto join". Will deprecated roomListResponse //TODO: CHANGE TO ONLY RETURN RELEVANT INFO - NOT FILE & ANSWERS
         const games: Game[] = dataStore.games;
         this.io.emit("roomListUpdated", games);
+        this.socket.emit("createdRoomResponse", game); //Only need game id, but returning entire game since used that model in frontend
+    }
+
+    userJoinedGame(data: UserJoinedGame){
+        console.log("UserJoinedGame server data: ", data)
+
+        //Add player to the game
+        let user: User = dataStore.findUserBySocketId(this.socket.id);
+
+        dataStore.addPlayerToGame(data.gameId, new Player(user.name, user.id, 0));
+
+        let game: Game = dataStore.findGame(data.gameId);
+
+        //Notify all players in this game. Easiest way - iterate over relevant sockets and emit. Better way - rooms.
+        this.socket.join(game.socketRoom, (error: any) => {
+            if(error){ 
+                console.log("Error joining room: ", error); 
+                throw error 
+            }
+            else {
+                //Emit to all sockets in room that user joined. Including the user.
+                this.io.in(game.socketRoom).emit('userListUpdated', game.players);
+                console.log("Sending players: ", game.players);
+            }
+        });
     }
 }
 

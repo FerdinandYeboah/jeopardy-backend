@@ -11,6 +11,16 @@ class DataStore {
 
     files: File[] = fileService.getFiles();
 
+    findGame(gameId: number): Game {
+        for (let game of this.games){
+            if (game.id === gameId){
+                return game;
+            }
+        }
+
+        //If game not found throw error, or configure typing to force null is a possible return type and its handling...
+    }
+
     addGame(name: string, fileId: number): Game {
         //Get the relevant file
         let file: File = fileService.getFileById(fileId);

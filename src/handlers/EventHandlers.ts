@@ -1,7 +1,8 @@
 import { UserCreated, RoomCreated, UserJoinedGame } from "../models/Events";
 import { dataStore } from "../persistence/Datastore";
-import { Game, Player } from "../models/Game";
+import { Game, Player, PlayerReadyStatus } from "../models/Game";
 import { User } from "../models/User";
+import { sanitizeCircular } from "../utils/SanitizeCircular";
 
 export class EventHandler {
 
@@ -20,11 +21,13 @@ export class EventHandler {
 
         //Add the user and their profile info to datastore.
         dataStore.addUser(this.socket.id, data.name);
+        
+        let gamesCircularRemoved: Game[] = sanitizeCircular(dataStore.games);
 
-        this.socket.emit("roomListUpdated", dataStore.games);
+        this.socket.emit("roomListUpdated", gamesCircularRemoved);
     }
 
-    roomListRequested() {
+    roomListRequested() { // - DEPRECATED
         //Get list of rooms
         const games: Game[] = dataStore.games;
 
@@ -32,7 +35,7 @@ export class EventHandler {
 
 
         //Return list of rooms //TODO: CHANGE TO ONLY RETURN RELEVANT INFO - NOT FILE & ANSWERS
-        this.socket.emit("roomListResponse", games)
+        this.socket.emit("roomListResponse", sanitizeCircular(games))
     }
 
     roomCreated(data: RoomCreated) {
@@ -71,8 +74,8 @@ export class EventHandler {
 
         //Notify list of rooms updated. Emit response with game id so creator can "auto join". Will deprecated roomListResponse //TODO: CHANGE TO ONLY RETURN RELEVANT INFO - NOT FILE & ANSWERS
         const games: Game[] = dataStore.games;
-        this.io.emit("roomListUpdated", games);
-        this.socket.emit("createdRoomResponse", game); //Only need game id, but returning entire game since used that model in frontend
+        this.io.emit("roomListUpdated", sanitizeCircular(games));
+        this.socket.emit("createdRoomResponse", sanitizeCircular(game)); //Only need game id, but returning entire game since used that model in frontend
     }
 
     userJoinedGame(data: UserJoinedGame){
@@ -81,7 +84,7 @@ export class EventHandler {
         //Add player to the game
         let user: User = dataStore.findUserBySocketId(this.socket.id);
 
-        dataStore.addPlayerToGame(data.gameId, new Player(user.name, user.id, 0));
+        dataStore.addPlayerToGame(data.gameId, user.name, user.id);
 
         let game: Game = dataStore.findGame(data.gameId);
 
@@ -93,10 +96,31 @@ export class EventHandler {
             }
             else {
                 //Emit to all sockets in room that user joined. Including the user.
-                this.io.in(game.socketRoom).emit('userListUpdated', game.players);
+                this.io.in(game.socketRoom).emit('userListUpdated', sanitizeCircular(game.players));
                 console.log("Sending players: ", game.players);
             }
         });
+    }
+
+    playerReadiedUp(){ //Doesn't take input
+
+        //Find player that readied up
+        let player: Player = dataStore.findPlayerBySocketId(this.socket.id);
+
+        console.log("playerReadiedUp: ", player.name)
+
+        //Set their status to ready. Note, if I created readyUp functions then I wouldn't have to import this internal class or know how its implemented
+        player.status = PlayerReadyStatus.READY;
+
+        //Update userlist. Ah need the game the user is in. Consider adding a reference to the game from the player.
+        /*Can actually also implement user/player source of truth by placing a back reference to user on the player object. 
+            When getting the player, check if the user reference is not null then return. Deleting a user would then have to be done by placing its pointer to null. 
+            Not just removing from array (the reference will still likely exist)
+        */
+       let game: Game = player.game;
+       this.io.in(game.socketRoom).emit('userListUpdated', sanitizeCircular(game.players));
+
+        //If all players readied up and numPlayers >= 2 then start game (change game state and emit startGame event)
     }
 }
 

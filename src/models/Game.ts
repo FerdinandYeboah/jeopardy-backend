@@ -1,6 +1,6 @@
 import { File } from "./File";
 
-// Game Model - Matches with RoomBackendModel on frontend
+// Game Model - Matches with RoomBackendModel on frontend - Basically Rooms are called Games on the backend.
 class Game {
     id: number; //Keep a static variable that is already incremented?
     socketRoom: string; //socket io room
@@ -34,11 +34,14 @@ class Player {
     name: string;
     id: string;
     score: number;
+    game: Game;
+    status: PlayerReadyStatus = PlayerReadyStatus.WAITING
 
-    constructor(name: string, id: any, score: number){
+    constructor(name: string, id: any, score: number, game: Game){
         this.name = name;
         this.id = id;
         this.score = score;
+        this.game = game;
     }
 }
 
@@ -47,5 +50,9 @@ enum State {
     GAME
 }
 
+enum PlayerReadyStatus {
+    READY,
+    WAITING
+}
 
-export {Game, Player, State}
+export {Game, Player, PlayerReadyStatus, State}

@@ -1,5 +1,5 @@
 // Data layer
-import { Game, Player, State } from "../models/Game";
+import { Game, Player, State, PlayerReadyStatus } from "../models/Game";
 import { File } from "../models/File";
 import { fileService } from "../service/FileService";
 import { User } from "../models/User";
@@ -41,7 +41,9 @@ class DataStore {
 
     // Exposed function operations
     // addNewGame, addNewPlayer, startGame
-    addPlayerToGame(gameId: number, player: Player){
+    addPlayerToGame(gameId: number, name: string, id: string){
+        let player: Player = new Player(name, id, 0, this.findGame(gameId));
+
         let foundGame = false;
         
         //Get the game from id
@@ -96,19 +98,40 @@ class DataStore {
 
     }
 
+    findPlayerBySocketId(socketId: string): Player {
+        //Search through all games and its players
+        let foundPlayer: Player = null;
+        
+        for (let game of this.games){
+            for (let player of game.players){
+                if (player.id === socketId){
+                    foundPlayer = player;
+                }
+            }
+        }
+
+        if (foundPlayer !== null){
+            return foundPlayer;
+        }
+        else {
+            //Throw error? I guess since I disabled strictNullChecks its not warning me the possiblity of returning null right now
+        }
+    }
+
 }
 
 // Global datastore variable
 const dataStore = new DataStore();
 
 // Add some initial games to test?
-dataStore.addGame("EveryoneWelcome", 3);
-dataStore.addGame("Pros Only", 1);
-dataStore.startGame(2);
+let game1 = dataStore.addGame("EveryoneWelcome", 3);
+let game2 = dataStore.addGame("Pros Only", 1);
+dataStore.startGame(game2.id);
 
-dataStore.addPlayerToGame(1, new Player("Ferdinand", "fake_socket_id", 0))
-dataStore.addPlayerToGame(2, new Player("Baller", "socket_id" , 0))
-dataStore.addPlayerToGame(2, new Player("Bucket", "wss_id", 0))
+
+dataStore.addPlayerToGame(game1.id, "Ferdinand", "fake_socket_id")
+dataStore.addPlayerToGame(game2.id, "Baller", "socket_id")
+dataStore.addPlayerToGame(game2.id, "Bucket", "wss_id")
 
 
 export {dataStore}

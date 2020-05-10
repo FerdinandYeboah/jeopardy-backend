@@ -27,6 +27,13 @@ class Game {
         //Add the player
         this.players.push(player)
     }
+
+    removePlayer(playerId: String){
+        //Use filter (keep) to return new array
+        this.players = this.players.filter(function(player){
+            return player.id != playerId;
+        })
+    }
     
 }
 

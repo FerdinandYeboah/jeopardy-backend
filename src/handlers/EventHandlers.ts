@@ -21,10 +21,8 @@ export class EventHandler {
 
         //Add the user and their profile info to datastore.
         dataStore.addUser(this.socket.id, data.name);
-        
-        let gamesCircularRemoved: Game[] = sanitizeCircular(dataStore.games);
 
-        this.socket.emit("roomListUpdated", gamesCircularRemoved);
+        this.updateLobbyList();
     }
 
     roomListRequested() { // - DEPRECATED
@@ -74,8 +72,8 @@ export class EventHandler {
 
         //Notify list of rooms updated. Emit response with game id so creator can "auto join". Will deprecated roomListResponse //TODO: CHANGE TO ONLY RETURN RELEVANT INFO - NOT FILE & ANSWERS
         const games: Game[] = dataStore.games;
-        this.io.emit("roomListUpdated", sanitizeCircular(games));
         this.socket.emit("createdRoomResponse", sanitizeCircular(game)); //Only need game id, but returning entire game since used that model in frontend
+        this.updateLobbyList();
     }
 
     userJoinedGame(data: UserJoinedGame){
@@ -98,6 +96,7 @@ export class EventHandler {
                 //Emit to all sockets in room that user joined. Including the user.
                 this.io.in(game.socketRoom).emit('userListUpdated', sanitizeCircular(game.players));
                 console.log("Sending players: ", game.players);
+                this.updateLobbyList();
             }
         });
     }
@@ -120,8 +119,43 @@ export class EventHandler {
        let game: Game = player.game;
        this.io.in(game.socketRoom).emit('userListUpdated', sanitizeCircular(game.players));
 
-        //If all players readied up and numPlayers >= 2 then start game (change game state and emit startGame event)
+        //If all players readied up and numPlayers >= 2 then start game (change game state and emit startGame event) & update lobby list
+        this.updateLobbyList();
     }
+
+    playerLeftRoom(callback: Function){
+        //Find player that left
+        let player: Player = dataStore.findPlayerBySocketId(this.socket.id);
+
+        //Remove them
+        let game: Game = player.game;
+        game.removePlayer(player.id);
+
+        //Execute callback with true if remove successful, false if not. Can I type the callback function? The params and expected response
+        callback(true);
+
+        //Leave socket room and notify players in game
+        this.socket.leave(game.socketRoom, (error: any) => {
+            if(error){ 
+                console.log("Error leaving room: ", error); 
+                throw error 
+            }
+            else {
+                //Emit to all sockets in room that user left, excluding user? Doesn't matter, they left
+                this.io.in(game.socketRoom).emit('userListUpdated', sanitizeCircular(game.players));
+                console.log("Sending players: ", game.players);
+                this.updateLobbyList();
+
+                //TODO: If zero players left, remove room
+
+            }
+        })
+    }
+
+    updateLobbyList(){
+        this.io.emit("roomListUpdated", sanitizeCircular(dataStore.games));
+    }
+    
 }
 
 

@@ -146,7 +146,11 @@ export class EventHandler {
                 console.log("Sending players: ", game.players);
                 this.updateLobbyList();
 
-                //TODO: If zero players left, remove room
+                //If zero players left, remove room
+                if (game.players.length == 0){
+                    dataStore.removeGame(game.id);
+                    this.updateLobbyList();
+                }
 
             }
         })

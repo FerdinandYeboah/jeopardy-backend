@@ -6,8 +6,8 @@ import { User } from "../models/User";
 
 class DataStore {
     // In memory datastore
-    readonly games: Game[] = []
-    readonly users: User[] = []
+    games: Game[] = []
+    users: User[] = []
 
     files: File[] = fileService.getFiles();
 
@@ -34,9 +34,12 @@ class DataStore {
         return game;
     }
 
-    // addGame(game: Game){
-    //     this.games.push(game);
-    // }
+    removeGame(gameId: number){
+        //Filter (keep) games
+        this.games = this.games.filter((game) => {
+            return gameId != game.id;
+        })
+    }
 
 
     // Exposed function operations

@@ -76,13 +76,16 @@ export class EventHandler {
         this.updateLobbyList();
     }
 
-    userJoinedGame(data: UserJoinedGame){
+    userJoinedGame(data: UserJoinedGame, callback: Function){
         console.log("UserJoinedGame server data: ", data)
 
         //Add player to the game
         let user: User = dataStore.findUserBySocketId(this.socket.id);
 
         dataStore.addPlayerToGame(data.gameId, user.name, user.id);
+
+        //Execute callback with true if remove successful, false if not. Can I type the callback function? The params and expected response
+        callback(true);
 
         let game: Game = dataStore.findGame(data.gameId);
 
@@ -151,6 +154,8 @@ export class EventHandler {
                     dataStore.removeGame(game.id);
                     this.updateLobbyList();
                 }
+
+                //Optional future: If leaving results in all players being ready and players > 2 start game. 
 
             }
         })

@@ -34,6 +34,32 @@ class Game {
             return player.id != playerId;
         })
     }
+
+    startGame(){
+        this.state = State.GAME;
+    }
+
+    shouldStartGame(): Boolean {
+        //If all players ready and atleast 2 players in game
+        if (this.players.length >= 2 && this.areAllPlayersReady()){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    areAllPlayersReady(): Boolean {
+        let arePlayersReady: Boolean = true;
+
+        this.players.forEach(player => {
+            if(player.status == PlayerReadyStatus.WAITING){
+                arePlayersReady = false;
+            }
+        });
+
+        return arePlayersReady;
+    }
     
 }
 

@@ -122,8 +122,13 @@ export class EventHandler {
        let game: Game = player.game;
        this.io.in(game.socketRoom).emit('userListUpdated', sanitizeCircular(game.players));
 
-        //If all players readied up and numPlayers >= 2 then start game (change game state and emit startGame event) & update lobby list
-        this.updateLobbyList();
+        //If game ready (players ready and atleast 2 people) - then start game (change game state and emit startGame event) & update lobby list
+        if (game.shouldStartGame()){
+            game.startGame();
+            this.io.in(game.socketRoom).emit('startGame', sanitizeCircular(game.players));
+
+            this.updateLobbyList();
+        }
     }
 
     playerLeftRoom(callback: Function){
@@ -161,6 +166,19 @@ export class EventHandler {
         })
     }
 
+    currentRoomRequested(callback: Function){
+        //Find player
+        let player: Player = dataStore.findPlayerBySocketId(this.socket.id);
+
+        //Get game
+        let game: Game = player.game;
+
+        //Send back game details via callback. NOTE: (in future exclude answers)
+        callback(sanitizeCircular(game));
+    }
+
+
+    //Helper functions
     updateLobbyList(){
         this.io.emit("roomListUpdated", sanitizeCircular(dataStore.games));
     }

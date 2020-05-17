@@ -46,6 +46,7 @@ io.on('connection', function(socket: any){
   socket.on("userJoinedGame", handlers.userJoinedGame.bind(handlers))
   socket.on("playerReadiedUp", handlers.playerReadiedUp.bind(handlers))
   socket.on("playerLeftRoom", handlers.playerLeftRoom.bind(handlers))
+  socket.on("currentRoomRequested", handlers.currentRoomRequested.bind(handlers))
 
   //System provided events. i.e disconnect
 });

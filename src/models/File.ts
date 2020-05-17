@@ -24,6 +24,7 @@ class Question {
     question: string;
     answers: Answer;
     correctAnswer: string;
+    hasBeenAnswered: Boolean = false;
 
     constructor(category: string, value: string, question: string, answers: Answer, correctAnswer: string){
         this.category = category;

@@ -1,8 +1,9 @@
-import { UserCreated, RoomCreated, UserJoinedGame } from "../models/Events";
+import { UserCreated, RoomCreated, UserJoinedGame, PlayerClickedGameCell } from "../models/Events";
 import { dataStore } from "../persistence/Datastore";
 import { Game, Player, PlayerReadyStatus } from "../models/Game";
 import { User } from "../models/User";
 import { sanitizeCircular } from "../utils/SanitizeCircular";
+import { Question } from "../models/File";
 
 export class EventHandler {
 
@@ -175,6 +176,25 @@ export class EventHandler {
 
         //Send back game details via callback. NOTE: (in future exclude answers)
         callback(sanitizeCircular(game));
+    }
+
+    playerClickedGameCell(data: PlayerClickedGameCell){
+
+        //Find player
+        let player: Player = dataStore.findPlayerBySocketId(this.socket.id);
+        console.log("playerClickedGameCell: ", player.name)
+
+        //Find question that was clicked
+        let game: Game = player.game;
+        let question: Question = game.file.findQuestion(data.category, data.value)
+
+        //If they have control, and question has not been answered yet then emit showing question. Else ignore. Set question to answered when it is actually answered.
+        if(player.id === game.controllingPlayerId && !question.hasBeenAnswered){
+            this.io.in(game.socketRoom).emit('showQuestion', sanitizeCircular(question));
+        }
+        else {
+            console.log(`${player.name} is not board controller or question has been answered`)
+        }
     }
 
 

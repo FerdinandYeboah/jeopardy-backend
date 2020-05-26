@@ -10,3 +10,8 @@ export type RoomCreated = {
 export type UserJoinedGame = {
     gameId: number
 }
+
+export type PlayerClickedGameCell = {
+    category: string
+    value: string
+}

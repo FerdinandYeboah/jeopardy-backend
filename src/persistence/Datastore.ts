@@ -1,6 +1,6 @@
 // Data layer
 import { Game, Player, State, PlayerReadyStatus } from "../models/Game";
-import { File } from "../models/File";
+import { File, Question } from "../models/File";
 import { fileService } from "../service/FileService";
 import { User } from "../models/User";
 

@@ -7,6 +7,7 @@ class Game {
     name: string | undefined;
     topic: string | undefined;
     file: File;
+    controllingPlayerId: string;
     players: Player[] = [];
     state: State = State.LOBBY;
 
@@ -36,7 +37,9 @@ class Game {
     }
 
     startGame(){
+        //Start game and give first (or random) player control
         this.state = State.GAME;
+        this.controllingPlayerId = this.players[0].id;
     }
 
     shouldStartGame(): Boolean {
@@ -68,7 +71,7 @@ class Player {
     id: string;
     score: number;
     game: Game;
-    status: PlayerReadyStatus = PlayerReadyStatus.WAITING
+    status: PlayerReadyStatus = PlayerReadyStatus.WAITING;
 
     constructor(name: string, id: any, score: number, game: Game){
         this.name = name;

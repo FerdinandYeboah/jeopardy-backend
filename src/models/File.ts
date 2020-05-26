@@ -15,6 +15,20 @@ class File {
     addQuestions(questions: Question[]){
         this.questions = this.questions.concat(questions);
     }
+
+    findQuestion(category: string, value: string): Question {
+        let question: Question = null;
+
+        /*Return the requested question. Simple search and return for now. TODO
+        Could be optimized (i.e indexing, Genesis 400 = 1st row 2nd item) but interface is same*/
+        this.questions.forEach(q => {
+            if(q.category === category && q.value == value){
+                question = q;
+            }
+        });
+
+        return question;
+    }
     
 }
 

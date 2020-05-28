@@ -190,7 +190,13 @@ export class EventHandler {
 
         //If they have control, and question has not been answered yet then emit showing question. Else ignore. Set question to answered when it is actually answered.
         if(player.id === game.controllingPlayerId && !question.hasBeenAnswered){
-            this.io.in(game.socketRoom).emit('showQuestion', sanitizeCircular(question));
+            //Show there is an upcoming question
+            this.io.in(game.socketRoom).emit('showUpcomingQuestion', sanitizeCircular(question));
+            
+            //After 3 seconds, ask the question - Needs to be an arrow function to maintain this in closure (alternatives: reference external function, use IIFE )
+            setTimeout(() => {
+                this.io.in(game.socketRoom).emit('askQuestion', sanitizeCircular(question));
+            }, 3000)
         }
         else {
             console.log(`${player.name} is not board controller or question has been answered`)

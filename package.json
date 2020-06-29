@@ -6,17 +6,19 @@
   "scripts": {
     "build": "./node_modules/typescript/bin/tsc",
     "tsc-node-start": "./node_modules/typescript/bin/tsc && node dist/server.js",
-    "start": "tsc && node dist/server.js",
+    "start": "tsc && nodemon dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "license": "MIT",
   "dependencies": {
     "@types/cors": "^2.8.6",
+    "@types/lodash": "^4.14.156",
     "@types/node": "^13.9.5",
     "bufferutil": "^4.0.1",
     "core-util-is": "^1.0.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "lodash": "^4.17.15",
     "nodemon": "^2.0.2",
     "socket.io": "^2.3.0",
     "typescript": "^3.8.3",

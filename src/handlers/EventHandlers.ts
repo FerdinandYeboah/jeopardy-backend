@@ -1,4 +1,4 @@
-import { UserCreated, RoomCreated, UserJoinedGame, PlayerClickedGameCell } from "../models/Events";
+import { UserCreated, RoomCreated, UserJoinedGame, PlayerClickedGameCell, PlayerGaveAnswer, PlayerAnsweredCorrectly, PlayerAnsweredIncorrectly, AllPlayerAnsweredIncorrectly } from "../models/Events";
 import { dataStore } from "../persistence/Datastore";
 import { Game, Player, PlayerReadyStatus } from "../models/Game";
 import { User } from "../models/User";
@@ -190,6 +190,9 @@ export class EventHandler {
 
         //If they have control, and question has not been answered yet then emit showing question. Else ignore. Set question to answered when it is actually answered.
         if(player.id === game.controllingPlayerId && !question.hasBeenAnswered){
+            //Set current question
+            game.currentQuestion = question;
+
             //Show there is an upcoming question
             this.io.in(game.socketRoom).emit('showUpcomingQuestion', sanitizeCircular(question));
             
@@ -201,6 +204,93 @@ export class EventHandler {
         else {
             console.log(`${player.name} is not board controller or question has been answered`)
         }
+    }
+
+    playerGaveAnswer(data: PlayerGaveAnswer){
+        /* Refer to 1.0 implementation to quickly understand checks need to be made
+            Will have playersAnswered on question object, and answer response will either be
+            correct or incorrect*/
+
+
+        //Find the current question
+        let player: Player = dataStore.findPlayerBySocketId(this.socket.id);
+        let game: Game = player.game;
+        let question: Question = game.currentQuestion;
+
+        if (question.isQuestionAnswerableByPlayer(player.id)){
+
+            //Answer the question
+            let isAnswerCorrect = question.answerQuestion(player.id, data.answer);
+
+            if (isAnswerCorrect){
+                //Mark question answered, increase player's score, emit person who got it right and answer, give them control, show game board
+                question.hasBeenAnswered = true;
+                player.score = player.score + parseInt(question.value); //TODO: update value to number
+                game.controllingPlayerId = player.id;
+
+                let correctResponse: PlayerAnsweredCorrectly = {
+                    playerId: player.id,
+                    playerName: player.name,
+                    correctAnswer: data.answer,
+                    game: game
+                }
+
+                this.io.in(game.socketRoom).emit('playerAnsweredCorrectly', sanitizeCircular(correctResponse));
+
+                //5 second timeout to show game board. Also send new game board data to be shown?
+                setTimeout(() => {
+                    this.io.in(game.socketRoom).emit('showGameBoard', sanitizeCircular(game));
+                }, 5000)
+            
+            }
+            else {
+                //Emit person who got it wrong, subtract score
+                player.score = player.score - parseInt(question.value);
+
+                let incorrectResponse: PlayerAnsweredIncorrectly = {
+                    playerId: player.id,
+                    playerName: player.name,
+                    incorrectAnswer: data.answer,
+                    game: game
+                }
+
+                this.io.in(game.socketRoom).emit('playerAnsweredIncorrectly', sanitizeCircular(incorrectResponse));
+
+            }
+
+            //If all get wrong, mark has been answered, show correct answer and show game board
+            if (question.playersAnswered.length === game.players.length && !question.hasBeenAnswered){
+                question.hasBeenAnswered = true;
+
+                let allIncorrectResponse: AllPlayerAnsweredIncorrectly = {
+                    correctAnswer: question.correctAnswer,
+                    game: game
+                }
+
+                this.io.in(game.socketRoom).emit('allPlayersAnsweredIncorrectly', sanitizeCircular(allIncorrectResponse));
+
+                //5 second timeout to show game board. Also send new game board data to be shown?
+                setTimeout(() => {
+                    this.io.in(game.socketRoom).emit('showGameBoard', sanitizeCircular(game));
+                }, 5000)
+            }
+
+            //TODO: Eventually there should be a 30sec timeout to answer. Maybe not here, probably in the click cell handler, then cleared when all give answer.
+
+            /* TODO: Check if all questions have been answered, and if so determine winner. If tie, then send all highest players tied. Then go back to waiting room?
+            Clear the previous timeout set to do something else if necessary */
+            let winners: Player[] = game.determineWinners();
+
+            if(winners != null){
+                //Send game over and winners
+                this.io.in(game.socketRoom).emit('gameOver', sanitizeCircular(winners))
+            }
+
+        }
+        else {
+            console.log(`${player.name} has already answered or the question has already been answered`)
+        }
+
     }
 
 

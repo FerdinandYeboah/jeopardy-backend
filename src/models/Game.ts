@@ -1,4 +1,4 @@
-import { File } from "./File";
+import { File, Question } from "./File";
 
 // Game Model - Matches with RoomBackendModel on frontend - Basically Rooms are called Games on the backend.
 class Game {
@@ -7,6 +7,7 @@ class Game {
     name: string | undefined;
     topic: string | undefined;
     file: File;
+    currentQuestion: Question;
     controllingPlayerId: string;
     players: Player[] = [];
     state: State = State.LOBBY;
@@ -62,6 +63,45 @@ class Game {
         });
 
         return arePlayersReady;
+    }
+
+    areAllQuestionsAnswered(): Boolean {
+        let areAllQuestionsAnswered: Boolean = true;
+
+        this.file.questions.forEach((question: Question) => {
+            if (!question.hasBeenAnswered){
+                areAllQuestionsAnswered = false;
+            }
+        })
+
+        return areAllQuestionsAnswered; 
+    }
+
+    determineWinners(): Player[] | null {
+        //Determine the winner, or winners if there is a tie
+        let winners: Player[] = []
+        let currentHighestScore = Number.MIN_SAFE_INTEGER
+
+        //If game hasn't ended return null
+        if (!this.areAllQuestionsAnswered()){
+            //throw exception, or could return null, or empty list
+            return null;
+        }
+
+        //Determine the list of winners
+        this.players.forEach((player: Player) => {
+            if (player.score > currentHighestScore){
+                //Clear out winners array with new player
+                winners = [player]
+                currentHighestScore = player.score;
+            }
+            else if (player.score === currentHighestScore){
+                //Add to winners array since currently a tie
+                winners.push(player)
+            }
+        })
+
+        return winners
     }
     
 }

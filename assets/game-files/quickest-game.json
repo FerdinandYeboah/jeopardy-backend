@@ -1,0 +1,28 @@
+{
+    "Greetings": [
+        {
+            "value": "200",
+            "question": "What is the most professional way to introduce yourself?",
+            "answers": {
+                "A": "Sup",
+                "B": "Wuz Good",
+                "C": "Hello",
+                "D": "Good Afternoon"
+            },
+            "correctAnswer": "D"
+        }
+    ],
+    "Topic": [
+        {
+            "value": "200",
+            "question": "What is the most professional way to introduce yourself?",
+            "answers": {
+                "A": "Sup",
+                "B": "Wuz Good",
+                "C": "Hello",
+                "D": "Good Afternoon"
+            },
+            "correctAnswer": "D"
+        }
+    ]
+}

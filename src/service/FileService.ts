@@ -1,5 +1,6 @@
 import fs from "fs" // import { readFileSync } from "fs";
 import { File, Question, Answer } from "../models/File";
+import _ from "lodash";
 
 class FileService {
 
@@ -14,7 +15,7 @@ class FileService {
             
             if (element.id === id){
                 file = element;
-                return element;
+                return _.cloneDeep(element);
             }
         }
 

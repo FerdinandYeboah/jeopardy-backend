@@ -30,6 +30,10 @@ class FileService {
 
     }
 
+    getRandomFile(): File {
+        return _.cloneDeep(_.sample(this.files))
+    }
+
     getFiles(){
         return this.files;
     }

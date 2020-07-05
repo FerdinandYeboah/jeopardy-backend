@@ -127,17 +127,20 @@ class DataStore {
 const dataStore = new DataStore();
 
 // Add some initial games to test?
-let game1 = dataStore.addGame("EveryoneWelcome", 3);
-let game2 = dataStore.addGame("Pros Only", 1);
-dataStore.startGame(game2.id);
-
-
-dataStore.addPlayerToGame(game1.id, "Ferdinand", "fake_socket_id")
-dataStore.addPlayerToGame(game2.id, "Baller", "socket_id")
-dataStore.addPlayerToGame(game2.id, "Bucket", "wss_id")
+addTestData(dataStore);
 
 
 export {dataStore}
 
 
 //Usage. import { dataStore } from '/persistence/Datastore'. datastore.addNewGame(), datastore.addNewPlayer(game, player), dataStore.startGame()
+function addTestData(ds: DataStore){
+    let game1 = dataStore.addGame("EveryoneWelcome", 3);
+    let game2 = dataStore.addGame("Pros Only", 1);
+    dataStore.startGame(game2.id);
+
+
+    dataStore.addPlayerToGame(game1.id, "Ferdinand", "fake_socket_id")
+    dataStore.addPlayerToGame(game2.id, "Baller", "socket_id")
+    dataStore.addPlayerToGame(game2.id, "Bucket", "wss_id")
+}

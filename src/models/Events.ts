@@ -1,4 +1,4 @@
-import { Game } from "./Game"
+import { Game, Player } from "./Game"
 
 export type UserCreated = {
     name: string
@@ -38,5 +38,10 @@ export type PlayerAnsweredIncorrectly = {
 
 export type AllPlayerAnsweredIncorrectly = {
     correctAnswer: string,
+    game: Game
+}
+
+export type GameOver = {
+    winners: Player[],
     game: Game
 }

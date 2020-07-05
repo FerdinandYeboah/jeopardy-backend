@@ -1,4 +1,4 @@
-import { UserCreated, RoomCreated, UserJoinedGame, PlayerClickedGameCell, PlayerGaveAnswer, PlayerAnsweredCorrectly, PlayerAnsweredIncorrectly, AllPlayerAnsweredIncorrectly } from "../models/Events";
+import { UserCreated, RoomCreated, UserJoinedGame, PlayerClickedGameCell, PlayerGaveAnswer, PlayerAnsweredCorrectly, PlayerAnsweredIncorrectly, AllPlayerAnsweredIncorrectly, GameOver } from "../models/Events";
 import { dataStore } from "../persistence/Datastore";
 import { Game, Player, PlayerReadyStatus } from "../models/Game";
 import { User } from "../models/User";
@@ -216,6 +216,7 @@ export class EventHandler {
         let player: Player = dataStore.findPlayerBySocketId(this.socket.id);
         let game: Game = player.game;
         let question: Question = game.currentQuestion;
+        let showBoardTimer: NodeJS.Timeout;
 
         if (question.isQuestionAnswerableByPlayer(player.id)){
 
@@ -238,7 +239,7 @@ export class EventHandler {
                 this.io.in(game.socketRoom).emit('playerAnsweredCorrectly', sanitizeCircular(correctResponse));
 
                 //5 second timeout to show game board. Also send new game board data to be shown?
-                setTimeout(() => {
+                showBoardTimer = setTimeout(() => {
                     this.io.in(game.socketRoom).emit('showGameBoard', sanitizeCircular(game));
                 }, 5000)
             
@@ -270,7 +271,7 @@ export class EventHandler {
                 this.io.in(game.socketRoom).emit('allPlayersAnsweredIncorrectly', sanitizeCircular(allIncorrectResponse));
 
                 //5 second timeout to show game board. Also send new game board data to be shown?
-                setTimeout(() => {
+                showBoardTimer = setTimeout(() => {
                     this.io.in(game.socketRoom).emit('showGameBoard', sanitizeCircular(game));
                 }, 5000)
             }
@@ -282,8 +283,20 @@ export class EventHandler {
             let winners: Player[] = game.determineWinners();
 
             if(winners != null){
+                //Reset the game - unready all players, randomize game file, etc.
+                game.resetGame();
+                clearTimeout(showBoardTimer)
+
                 //Send game over and winners
-                this.io.in(game.socketRoom).emit('gameOver', sanitizeCircular(winners))
+                let gameOverResponse: GameOver = {
+                    winners: winners.map((winner) => {
+                        return sanitizeCircular(winner);
+                    }),
+                    game: sanitizeCircular(game)
+                }
+
+                //Emit the game over
+                this.io.in(game.socketRoom).emit('gameOver', gameOverResponse)
             }
 
         }

@@ -1,4 +1,5 @@
 import { File, Question } from "./File";
+import { fileService } from "../service/FileService";
 
 // Game Model - Matches with RoomBackendModel on frontend - Basically Rooms are called Games on the backend.
 class Game {
@@ -51,6 +52,21 @@ class Game {
         else {
             return false;
         }
+    }
+
+    resetGame(){
+        //Reset the game - back to lobby, randomize file (or same file), reset players, etc
+        this.state = State.LOBBY;
+        this.file = fileService.getRandomFile(); //for same file - fileService.getFileById(this.file.id);
+        this.resetAllPlayers();
+    }
+
+    resetAllPlayers() {
+        //Unready, set score to 0
+        this.players.forEach((player) => {
+            player.score = 0;
+            player.status = PlayerReadyStatus.WAITING;
+        })
     }
 
     areAllPlayersReady(): Boolean {
